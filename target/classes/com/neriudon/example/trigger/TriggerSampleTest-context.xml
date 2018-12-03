@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int:channel id="controlChannel" />
+
+	<int:channel id="adapterOutputChanel" />
+
+	<int:control-bus input-channel="controlChannel" />
+
+	<int:inbound-channel-adapter
+		id="sampleAdapter" auto-startup="false" expression="'Hello'"
+		channel="adapterOutputChanel">
+		<int:poller trigger="monitoringTrigger" />
+	</int:inbound-channel-adapter>
+
+	<bean id="monitoringTrigger"
+		class="org.springframework.scheduling.support.PeriodicTrigger">
+		<constructor-arg name="period" value="60" />
+		<constructor-arg name="timeUnit" value="SECONDS" />
+<!-- 		<property name="initialDelay" value="5" />
+ -->	</bean>
+
+	<int:logging-channel-adapter
+		channel="adapterOutputChanel" />
+
+</beans>
