@@ -20,9 +20,10 @@ public class TriggerSampleTest {
             "/com/neriudon/example/trigger/TriggerSampleTest-context.xml");
     MessageChannel controlChannel = ac.getBean("controlChannel", MessageChannel.class);
     logger.info("adapter will be started");
-    controlChannel.send(new GenericMessage<String>("@sampleAdapter.start()"));
-    controlChannel.send(new GenericMessage<String>("@sampleAdapter.stop()"));
+    controlChannel.send(new GenericMessage<String>("@firedBusAdapter.start()"));
+    controlChannel.send(new GenericMessage<String>("@firedBusWithDelayAdapter.start()"));
     Thread.sleep(10000);
+    logger.info("** end **\n\n");
     ac.close();
   }
 }

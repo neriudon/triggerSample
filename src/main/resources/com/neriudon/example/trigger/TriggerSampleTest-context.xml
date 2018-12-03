@@ -11,18 +11,41 @@
 
 	<int:control-bus input-channel="controlChannel" />
 
+
 	<int:inbound-channel-adapter
-		id="sampleAdapter" auto-startup="false" expression="'Hello'"
+		id="autoStartAdapter" expression="'autoStart'"
 		channel="adapterOutputChanel">
-		<int:poller trigger="monitoringTrigger" />
+		<int:poller trigger="noDelayTrigger" />
+	</int:inbound-channel-adapter>
+	<int:inbound-channel-adapter
+		id="autoStartWithDelayAdapter" expression="'autoStartWithDelay'"
+		channel="adapterOutputChanel">
+		<int:poller trigger="delayTrigger" />
 	</int:inbound-channel-adapter>
 
-	<bean id="monitoringTrigger"
+	<int:inbound-channel-adapter
+		id="firedBusAdapter" auto-startup="false" expression="'firedBus'"
+		channel="adapterOutputChanel">
+		<int:poller trigger="noDelayTrigger" />
+	</int:inbound-channel-adapter>
+	<int:inbound-channel-adapter
+		id="firedBusWithDelayAdapter" auto-startup="false"
+		expression="'firedBusWithDelay'" channel="adapterOutputChanel">
+		<int:poller trigger="delayTrigger" />
+	</int:inbound-channel-adapter>
+
+	<bean id="noDelayTrigger"
 		class="org.springframework.scheduling.support.PeriodicTrigger">
 		<constructor-arg name="period" value="60" />
 		<constructor-arg name="timeUnit" value="SECONDS" />
-<!-- 		<property name="initialDelay" value="5" />
- -->	</bean>
+	</bean>
+
+	<bean id="delayTrigger"
+		class="org.springframework.scheduling.support.PeriodicTrigger">
+		<constructor-arg name="period" value="60" />
+		<constructor-arg name="timeUnit" value="SECONDS" />
+		<property name="initialDelay" value="5" />
+	</bean>
 
 	<int:logging-channel-adapter
 		channel="adapterOutputChanel" />
